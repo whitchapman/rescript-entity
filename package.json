@@ -12,7 +12,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "rescript": "*",
+    "rescript": "^10.0.1",
     "uuid": "^8.3.2"
   }
 }
