@@ -12,20 +12,21 @@ function MakeEntity(Data) {
   var toString = function (t) {
     return t;
   };
-  var Id = {
-    make: make,
-    toString: toString
-  };
   var add = Belt_SetString.add;
   var remove = Belt_SetString.remove;
   var toArray = Belt_SetString.toArray;
   var size = Belt_SetString.size;
-  var IdSet = {
+  var $$Set = {
     empty: undefined,
     add: add,
     remove: remove,
     toArray: toArray,
     size: size
+  };
+  var Id = {
+    make: make,
+    toString: toString,
+    $$Set: $$Set
   };
   var make$1 = function (data) {
     var id = Curry._1(Data.id, data);
@@ -51,7 +52,6 @@ function MakeEntity(Data) {
   };
   return {
           Id: Id,
-          IdSet: IdSet,
           make: make$1,
           $$Map: $$Map
         };

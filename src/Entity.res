@@ -1,4 +1,3 @@
-open Belt
 
 module type EntityData = {
   type t
@@ -11,20 +10,21 @@ module type MakeEntity = (Data: EntityData) => {
     type t
     let make : string => t
     let toString : t => string
+    type id = t //alias needed for use within Set module
+
+    //--------------------
+
+    module type Set = {
+      type t
+      let empty : t
+      let add: (t, id) => t //adds element to set; if element exists in set, value is unchanged
+      let remove: (t, id) => t //removes element from set; if element not in set, value is unchanged
+      let toArray: t => array<id>
+      let size: t => int
+    }
+    module Set: Set
   }
   module Id: Id
-
-  //--------------------
-
-  module type IdSet = {
-    type t
-    let empty : t
-    let add: (t, Id.t) => t //adds element to set; if element exists in set, value is unchanged
-    let remove: (t, Id.t) => t //removes element from set; if element not in set, value is unchanged
-    let toArray: t => array<Id.t>
-    let size: t => int
-  }
-  module IdSet: IdSet
 
   //--------------------
 
@@ -55,32 +55,45 @@ module MakeEntity: MakeEntity = (Data: EntityData) => {
     type t
     let make : string => t
     let toString : t => string
+    type id = t //alias needed for use within Set module
+
+    module type Set = {
+      type t
+      let empty : t
+      let add: (t, id) => t
+      let remove: (t, id) => t
+      let toArray: t => array<id>
+      let size: t => int
+    }
+    module Set: Set
   }
 
-  module Id = {
+  module Id: Id = {
     type t = string
     let make = (s: string): t => s
     let toString = (t: t): string => t
-  }
+    type id = t //alias needed for use within Set module
 
-  //--------------------
+    //--------------------
 
-  module type IdSet = {
-    type t
-    let empty : t
-    let add: (t, Id.t) => t
-    let remove: (t, Id.t) => t
-    let toArray: t => array<Id.t>
-    let size: t => int
-  }
+    module type Set = {
+      type t
+      let empty : t
+      let add: (t, id) => t
+      let remove: (t, id) => t
+      let toArray: t => array<id>
+      let size: t => int
+    }
 
-  module IdSet = {
-    type t = Set.String.t
-    let empty: t = Set.String.empty
-    let add = (t, id): t => t->Set.String.add(id)
-    let remove = (t, id): t => t->Set.String.remove(id)
-    let toArray = (t: t): array<Id.t> => t->Set.String.toArray
-    let size = (t: t): int => t->Set.String.size
+    module Set: Set = {
+      type t = Belt.Set.String.t
+      let empty: t = Belt.Set.String.empty
+      let add = (t, id): t => t->Belt.Set.String.add(id)
+      let remove = (t, id): t => t->Belt.Set.String.remove(id)
+      let toArray = (t: t): array<id> => t->Belt.Set.String.toArray
+      let size = (t: t): int => t->Belt.Set.String.size
+    }
+
   }
 
   //--------------------
@@ -108,29 +121,29 @@ module MakeEntity: MakeEntity = (Data: EntityData) => {
     let has: (t, Id.t) => bool
   }
 
-  module Map = {
-    type t = Map.String.t<entity>
-    let empty: t = Map.String.empty
+  module Map: Map = {
+    type t = Belt.Map.String.t<entity>
+    let empty: t = Belt.Map.String.empty
 
     let get = (t: t, id: Id.t): option<entity> => {
-      t->Map.String.get(id)
+      t->Belt.Map.String.get(id->Id.toString)
     }
 
     //replaces if exists
     let add = (t: t, entity: entity): t => {
-      t->Map.String.set(entity.id, entity)
+      t->Belt.Map.String.set(entity.id->Id.toString, entity)
     }
 
     let remove = (t: t, id: Id.t): t => {
-      t->Map.String.remove(id)
+      t->Belt.Map.String.remove(id->Id.toString)
     }
 
     let size = (t: t): int => {
-      t->Map.String.size
+      t->Belt.Map.String.size
     }
 
     let has = (t: t, id: Id.t): bool => {
-      t->Map.String.has(id->Id.toString)
+      t->Belt.Map.String.has(id->Id.toString)
     }
   }
 }
