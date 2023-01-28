@@ -16,7 +16,7 @@ module type MakeEntity = (Data: EntityData) => {
 
   //--------------------
 
-  module type SetId = {
+  module type IdSet = {
     type t
     let empty : t
     let add: (t, Id.t) => t //adds element to set; if element exists in set, value is unchanged
@@ -24,7 +24,7 @@ module type MakeEntity = (Data: EntityData) => {
     let toArray: t => array<Id.t>
     let size: t => int
   }
-  module SetId: SetId
+  module IdSet: IdSet
 
   //--------------------
 
@@ -44,6 +44,7 @@ module type MakeEntity = (Data: EntityData) => {
     let add: (t, entity) => t //performs `Map.set` using `entity.id` as key
     let remove: (t, Id.t) => t
     let size: t => int
+    let has: (t, Id.t) => bool
   }
   module Map: Map
 }
@@ -64,7 +65,7 @@ module MakeEntity: MakeEntity = (Data: EntityData) => {
 
   //--------------------
 
-  module type SetId = {
+  module type IdSet = {
     type t
     let empty : t
     let add: (t, Id.t) => t
@@ -73,7 +74,7 @@ module MakeEntity: MakeEntity = (Data: EntityData) => {
     let size: t => int
   }
 
-  module SetId = {
+  module IdSet = {
     type t = Set.String.t
     let empty: t = Set.String.empty
     let add = (t, id): t => t->Set.String.add(id)
@@ -104,6 +105,7 @@ module MakeEntity: MakeEntity = (Data: EntityData) => {
     let add: (t, entity) => t
     let remove: (t, Id.t) => t
     let size: t => int
+    let has: (t, Id.t) => bool
   }
 
   module Map = {
@@ -125,6 +127,10 @@ module MakeEntity: MakeEntity = (Data: EntityData) => {
 
     let size = (t: t): int => {
       t->Map.String.size
+    }
+
+    let has = (t: t, id: Id.t): bool => {
+      t->Map.String.has(id->Id.toString)
     }
   }
 }

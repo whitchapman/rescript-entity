@@ -20,7 +20,7 @@ function MakeEntity(Data) {
   var remove = Belt_SetString.remove;
   var toArray = Belt_SetString.toArray;
   var size = Belt_SetString.size;
-  var SetId = {
+  var IdSet = {
     empty: undefined,
     add: add,
     remove: remove,
@@ -40,16 +40,18 @@ function MakeEntity(Data) {
   };
   var remove$1 = Belt_MapString.remove;
   var size$1 = Belt_MapString.size;
+  var has = Belt_MapString.has;
   var $$Map = {
     empty: undefined,
     get: get,
     add: add$1,
     remove: remove$1,
-    size: size$1
+    size: size$1,
+    has: has
   };
   return {
           Id: Id,
-          SetId: SetId,
+          IdSet: IdSet,
           make: make$1,
           $$Map: $$Map
         };
