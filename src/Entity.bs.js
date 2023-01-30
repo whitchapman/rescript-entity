@@ -5,7 +5,7 @@ var Curry = require("rescript/lib/js/curry.js");
 var Belt_MapString = require("rescript/lib/js/belt_MapString.js");
 var Belt_SetString = require("rescript/lib/js/belt_SetString.js");
 
-function MakeEntity(Data) {
+function MakeEntity(Model) {
   var make = function (s) {
     return s;
   };
@@ -28,11 +28,11 @@ function MakeEntity(Data) {
     toString: toString,
     $$Set: $$Set
   };
-  var make$1 = function (data) {
-    var id = Curry._1(Data.id, data);
+  var make$1 = function (model) {
+    var id = Curry._1(Model.id, model);
     return {
             id: id,
-            data: data
+            model: model
           };
   };
   var get = Belt_MapString.get;

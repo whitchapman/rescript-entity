@@ -1,10 +1,10 @@
 
-module type EntityData = {
+module type EntityModel = {
   type t
   let id : t => string
 }
 
-module type MakeEntity = (Data: EntityData) => {
+module type MakeEntity = (Model: EntityModel) => {
 
   module type Id = {
     type t
@@ -30,9 +30,9 @@ module type MakeEntity = (Data: EntityData) => {
 
   type t = {
     id: Id.t,
-    data: Data.t
+    model: Model.t
   }
-  let make : Data.t => t
+  let make : Model.t => t
   type entity = t //alias needed for use within Map module
 
   //--------------------
@@ -49,7 +49,7 @@ module type MakeEntity = (Data: EntityData) => {
   module Map: Map
 }
 
-module MakeEntity: MakeEntity = (Data: EntityData) => {
+module MakeEntity: MakeEntity = (Model: EntityModel) => {
 
   module type Id = {
     type t
@@ -98,14 +98,14 @@ module MakeEntity: MakeEntity = (Data: EntityData) => {
 
   //--------------------
 
-  //NB: it would be nice if there was a way to manipulate Data.t to include Id.t so everything is top level
+  //NB: it would be nice if there was a way to manipulate Model.t to include Id.t so everything is top level
   type t = {
     id: Id.t,
-    data: Data.t
+    model: Model.t
   }
-  let make = (data: Data.t): t => {
-    let id = data->Data.id->Id.make
-    {id, data}
+  let make = (model: Model.t): t => {
+    let id = model->Model.id->Id.make
+    {id, model}
   }
   type entity = t //alias needed for use within Map module
 

@@ -9,11 +9,11 @@ function id(t) {
   return t.id;
 }
 
-var CarData = {
+var CarModel = {
   id: id
 };
 
-var Car = Entity.MakeEntity(CarData);
+var Car = Entity.MakeEntity(CarModel);
 
 var cars = Car.$$Map.empty;
 
@@ -29,7 +29,7 @@ var cars$1 = Curry._2(Car.$$Map.add, cars, car);
 
 var id$2 = car.id;
 
-console.log("car -> id=" + Curry._1(Car.Id.toString, id$2) + " make=" + car.data.make + " year=" + String(car.data.year));
+console.log("car -> id=" + Curry._1(Car.Id.toString, id$2) + " make=" + car.model.make + " year=" + String(car.model.year));
 
 var car1 = Curry._2(Car.$$Map.get, cars$1, car.id);
 
@@ -43,7 +43,7 @@ var cars$3 = Curry._2(Car.$$Map.remove, cars$2, car.id);
 
 console.log(Curry._1(Car.$$Map.size, cars$3));
 
-exports.CarData = CarData;
+exports.CarModel = CarModel;
 exports.Car = Car;
 exports.car = car;
 exports.id = id$2;

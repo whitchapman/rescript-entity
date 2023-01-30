@@ -1,6 +1,6 @@
 open Belt
 
-module CarData = {
+module CarModel = {
   type t = {
     id: string,
     make: string,
@@ -8,14 +8,14 @@ module CarData = {
   }
   let id = t => t.id
 }
-module Car = Entity.MakeEntity(CarData)
+module Car = Entity.MakeEntity(CarModel)
 
 let cars = Car.Map.empty
 let id = Uuid.v4() //string
 let car = Car.make({id, make: "BMW", year: 2020})
 let cars = cars->Car.Map.add(car)
 let id = car.id //Car.Id.t
-Js.Console.log("car -> id=" ++ id->Car.Id.toString ++ " make=" ++ car.data.make ++ " year=" ++ car.data.year->Int.toString)
+Js.Console.log("car -> id=" ++ id->Car.Id.toString ++ " make=" ++ car.model.make ++ " year=" ++ car.model.year->Int.toString)
 let car1 = cars->Car.Map.get(car.id)
 Js.Console.log(cars->Car.Map.size)
 //let car2 = cars->Car.Map.get("random") //error
